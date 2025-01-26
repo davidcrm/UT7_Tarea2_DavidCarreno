@@ -1,0 +1,7 @@
+{
+  "name": "UT7_Tarea2_DavidCarreño",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react-vite"
+}
