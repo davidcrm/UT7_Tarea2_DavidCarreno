@@ -1,0 +1,82 @@
+.tabla-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: auto; /* Un tercio del ancho de la página */
+    height: 50vh; /* Un tercio de la altura de la ventana */
+    margin: 0;
+    overflow-y: auto; /* Scroll vertical habilitado */
+    border-radius: 8px;
+    background-color: #282828; /* Fondo oscuro del contenedor */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); /* Sombra flotante */
+  }
+
+  /* Tabla principal */
+  .styled-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #282828; /* Fondo oscuro de la tabla */
+    color: #e4e4eb; /* Texto claro */
+    overflow: hidden; /* Oculta el contenido desbordado */
+  }
+
+  .styled-table thead {
+    background-color: #282828; /* Fondo del encabezado */
+    position: sticky;
+    top: 0; /* Fija el encabezado al hacer scroll */
+    z-index: 1; /* Asegura que el encabezado esté por encima de las filas */
+  }
+
+  /* Cabecera */
+  .header-row th {
+    padding: 10px 12px;
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+    text-align: left;
+    color: #ffffff; /* Texto blanco */
+    border-bottom: 2px solid #282828; /* Línea destacada debajo del encabezado */
+  }
+
+  /* Filas */
+  .data-row {
+    font-size: 14px;
+    text-align: left;
+    transition: background-color 0.2s ease-in-out;
+  }
+
+  .data-row:nth-child(even) {
+    background-color: #282828; /* Color alternado oscuro */
+  }
+
+  .data-row:nth-child(odd) {
+    background-color: #282828; /* Color base para filas impares */
+  }
+
+  .data-row:hover {
+    background-color: #282828; /* Efecto hover */
+  }
+
+  .data-row td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #283030; /* Línea divisoria entre filas */
+  }
+
+  /* Ajustes para última fila */
+  .styled-table tbody tr:last-child td {
+    border-bottom: none;
+  }
+
+  /* Diseño responsivo */
+  @media (max-width: 768px) {
+    .tabla-container {
+      width: 100%; /* Ocupa todo el ancho en pantallas pequeñas */
+      height: 50vh; /* Ajusta la altura */
+    }
+
+    .header-row th,
+    .data-row td {
+      font-size: 12px;
+      padding: 8px;
+    }
+  }
