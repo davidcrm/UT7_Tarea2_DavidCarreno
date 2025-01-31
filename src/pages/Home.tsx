@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Alumno } from "../types/types";
 import TablaAlumnos from "../components/TablaAlumnos";
 import FormComponent from "../components/FormComponent";
+import {IonCol, IonGrid, IonRow } from "@ionic/react";
 
 const Home: React.FC = () => {
   const [alumnos, setAlumnos] = useState<Alumno[]>();
@@ -32,20 +33,22 @@ const Home: React.FC = () => {
     console.log(a)
   }
   return (
-    <>
-    <div>
-      <div className="col-md-6">
-            <TablaAlumnos alumnos={alumnos} onClick={onAlumnoClick}/>
-          </div>
-          <div className="col-ml-6">
-            <FormComponent alumnoSeleccionado={alumno}/>
-          </div>
-            <div>
+      <>
+        <IonGrid>
+          <IonRow>
+            <IonCol size="6">
+              <TablaAlumnos alumnos={alumnos} onClick={onAlumnoClick} />
+            </IonCol>
+            <IonCol>
               <h1>{alumno?.nombre}</h1>
-          </div>
-    </div>
-    
-    </>
+              <IonCol size="6">
+                <FormComponent alumnoSeleccionado={alumno} />
+              </IonCol>
+            </IonCol>
+          </IonRow>
+
+        </IonGrid>
+      </>
   );
 };
 
