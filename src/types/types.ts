@@ -1,6 +1,6 @@
 export interface Alumno{
-    matricula: number;
     nombre:    string;
+    matricula: number;
     sexo:      Sexo;
     email:     null | string;
     repetidor: boolean;

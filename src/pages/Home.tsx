@@ -32,23 +32,23 @@ const Home: React.FC = () => {
     setAlumno(a);
     console.log(a)
   }
-  return (
-      <>
-        <IonGrid>
-          <IonRow>
-            <IonCol size="6">
-              <TablaAlumnos alumnos={alumnos} onClick={onAlumnoClick} />
-            </IonCol>
-            <IonCol>
-              <h1>{alumno?.nombre}</h1>
-              <IonCol size="6">
-                <FormComponent alumnoSeleccionado={alumno} />
-              </IonCol>
-            </IonCol>
-          </IonRow>
 
-        </IonGrid>
-      </>
+  const onLimpiar = () => {
+    setAlumno(undefined)
+  }
+
+  return (
+    <IonGrid>
+      <IonRow>
+        <IonCol size="6">
+          <TablaAlumnos alumnos={alumnos} onClick={onAlumnoClick} />
+        </IonCol>
+        <IonCol size="6">
+          <h1>{alumno?.nombre}</h1>
+          <FormComponent alumnoSeleccionado={alumno} onLimpiar={onLimpiar}/>
+        </IonCol>
+      </IonRow>
+    </IonGrid>
   );
 };
 
