@@ -1,4 +1,5 @@
 export interface Alumno{
+    id: number,
     nombre:    string;
     matricula: number;
     sexo:      Sexo;
