@@ -20,4 +20,3 @@ import {Alumno} from "../types/types";
       throw error;
     }
   }
-

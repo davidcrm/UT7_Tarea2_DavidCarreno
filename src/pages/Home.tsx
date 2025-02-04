@@ -44,5 +44,5 @@ const Home: React.FC = () => {
     </IonGrid>
   );
 };
-
+  
 export default Home;
