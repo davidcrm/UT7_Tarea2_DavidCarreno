@@ -1,6 +1,8 @@
 import {IonButton, IonInput, IonItem, IonList, IonSelect, IonSelectOption} from '@ionic/react'
 import {Alumno, Sexo} from '../types/types'
 import {useEffect, useState} from 'react'
+import { insertAlumno } from '../services/insertAlumno';
+import { updateAlumno } from '../services/updateAlumno';
 
 interface FormComponentProps{
   alumnoSeleccionado: Alumno | undefined
@@ -15,7 +17,8 @@ function FormComponent({alumnoSeleccionado}:FormComponentProps) {
     email: null,
     repetidor: false,
     activo: false
-  })
+  });
+
   // Actualiza el formulario cada vez que cambia el alumno seleccionado
   useEffect(() => {
     if (alumnoSeleccionado) {
@@ -37,7 +40,7 @@ function FormComponent({alumnoSeleccionado}:FormComponentProps) {
       activo: false,
     });
   };
-  // Maneja los cambios en el formulario extrayendo los valores del evento (E.target.value)
+
   const handleChange = (e: any) => {
     const { name, value, type } = e.target;
     setFormData(prevState => ({
@@ -55,6 +58,7 @@ function FormComponent({alumnoSeleccionado}:FormComponentProps) {
       [name]: value,
     }));
   };
+
 
   return (
     <div>
@@ -122,9 +126,9 @@ function FormComponent({alumnoSeleccionado}:FormComponentProps) {
       </IonList>
 
       {alumnoSeleccionado ? (
-        <IonButton disabled={JSON.stringify(formData) === JSON.stringify(alumnoSeleccionado)}>Modificar</IonButton>
+        <IonButton disabled={JSON.stringify(formData) === JSON.stringify(alumnoSeleccionado)} onClick={() => updateAlumno(formData)}>Modificar</IonButton>
       ) : (
-        <IonButton>Guardar</IonButton>
+        <IonButton onClick={() => insertAlumno(formData)}>Guardar</IonButton>
       )}
 
       <IonButton onClick={limpiarFormulario}>Limpiar</IonButton>
