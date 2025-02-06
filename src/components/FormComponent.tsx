@@ -3,6 +3,8 @@ import {Alumno, Sexo} from '../types/types'
 import {useEffect, useState} from 'react'
 import { insertAlumno } from '../services/insertAlumno';
 import { updateAlumno } from '../services/updateAlumno';
+import { CancelOutlined, EditOutlined, Save, SaveAltOutlined } from '@mui/icons-material';
+import { EraseIcon } from './Icons/Icons';
 
 interface FormComponentProps{
   alumnoSeleccionado: Alumno | undefined
@@ -62,6 +64,9 @@ function FormComponent({alumnoSeleccionado}:FormComponentProps) {
 
   return (
     <div>
+      <h1 style={{display:'flex', justifyContent: 'center', alignItems: 'center', marginTop: '10px'}}>
+        {alumnoSeleccionado === formData ? `Modificar registro.` : "Crear un nuevo registro."}
+      </h1>
       <IonList>
         <IonItem>
           <IonInput
@@ -124,14 +129,27 @@ function FormComponent({alumnoSeleccionado}:FormComponentProps) {
           </IonSelect>
         </IonItem>
       </IonList>
-
-      {alumnoSeleccionado ? (
-        <IonButton disabled={JSON.stringify(formData) === JSON.stringify(alumnoSeleccionado)} onClick={() => updateAlumno(formData)}>Modificar</IonButton>
-      ) : (
-        <IonButton onClick={() => insertAlumno(formData)}>Guardar</IonButton>
-      )}
-
-      <IonButton onClick={limpiarFormulario}>Limpiar</IonButton>
+      <div style={{display:'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '10px'}}>
+            {alumnoSeleccionado === formData ? (
+                <IonButton 
+                  fill='outline'
+                  disabled={JSON.stringify(formData) === JSON.stringify(alumnoSeleccionado)} 
+                  onClick={() => updateAlumno(formData)}>
+                    <EditOutlined/>
+                </IonButton>
+              ) : (
+                <IonButton 
+                fill='outline'
+                onClick={() => insertAlumno(formData)}>
+                  <SaveAltOutlined/>
+                </IonButton>
+              )}
+                <IonButton 
+                fill='outline'
+                  onClick={limpiarFormulario}>
+                    <EraseIcon/>
+                </IonButton>
+      </div>
     </div>
   )
 }

@@ -37,7 +37,6 @@ const Home: React.FC = () => {
           <TablaAlumnos alumnos={alumnos} onClick={onAlumnoClick} />
         </IonCol>
         <IonCol size="6">
-          <h1>{alumno ? `Modificar registro.` : "Crear un nuevo registro."}</h1>
           <FormComponent alumnoSeleccionado={alumno} />
         </IonCol>
       </IonRow>

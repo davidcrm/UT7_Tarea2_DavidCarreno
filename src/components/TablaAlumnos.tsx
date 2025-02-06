@@ -1,5 +1,7 @@
 
+import { IonButton } from '@ionic/react'
 import { Alumno } from '../types/types'
+import { Delete, DeleteOutlineRounded } from '@mui/icons-material'
 
 interface TablaAlumnosProps{
     alumnos: Alumno[] | undefined,
@@ -21,6 +23,7 @@ function TablaAlumnos({alumnos, onClick}:TablaAlumnosProps) {
             <th scope="col">Email</th>
             <th scope="col">Repetidor</th>
             <th scope="col">Activo</th>
+            <th scope="col">Eliminar</th>
           </tr>
         </thead>
         <tbody>
@@ -32,6 +35,7 @@ function TablaAlumnos({alumnos, onClick}:TablaAlumnosProps) {
               <td onClick={ () => onClick(alumno)}>{alumno.email}</td>
               <td onClick={ () => onClick(alumno)}>{alumno.repetidor ? "Sí" : "No"}</td>
               <td onClick={ () => onClick(alumno)}>{alumno.activo ? "Sí" : "No"}</td>
+              <td><IonButton  color='danger'><DeleteOutlineRounded color='action'/></IonButton></td>
             </tr>
           ))}
         </tbody>
