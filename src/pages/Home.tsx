@@ -25,19 +25,48 @@ const Home: React.FC = () => {
     fetchAlumnos();
   }, []);
 
-  const onAlumnoClick = (a: Alumno) => {
-    setAlumno(a);
-    console.log(a)
-  }
+  const onAlumnoClick = (alumno: Alumno) => {
+    setAlumno(alumno);
+  };
+
+  const agregarAlumno = (alumno: Alumno) => {
+    setAlumnos([...(alumnos ?? []), alumno]);
+  };
+
+  const eliminarAlumno = (id: number) => {
+    const alumnosFiltrados = alumnos?.filter(item => item.id !== id);
+    setAlumnos(alumnosFiltrados ?? []);
+  };
+
+  const actualizarAlumno = (alumno: Alumno) => {
+    // Recorrer todos los alumnos
+    setAlumnos(prev => prev?.map(item => {
+      // Si el id del alumno actual es el mismo que es que recibimos por parámetro
+      // Creamos un objeto con los datos previos y posteriormente los nuevos para que se actualicen
+      if(item.id === alumno.id) return { ...prev, ...alumno };
+      // Si no coincide devolvemos el alumno sin modificarlo
+      return item;
+    }) ?? []); // Si el array de alumnos el undefined le damos un valor por defecto []
+  };
 
   return (
     <IonGrid>
       <IonRow>
         <IonCol size="6">
-          <TablaAlumnos alumnos={alumnos} onClick={onAlumnoClick} />
+          <TablaAlumnos 
+            alumnos={alumnos} 
+            onClick={onAlumnoClick} 
+            eliminarAlumno={eliminarAlumno}
+          />
         </IonCol>
         <IonCol size="6">
-          <FormComponent alumnoSeleccionado={alumno} />
+          <FormComponent 
+            alumnoSeleccionado={alumno} 
+            ultimaMatricula={alumnos?.[alumnos?.length - 1]?.matricula}
+            clearAlumno={() => setAlumno(undefined)}
+            agregarAlumno={agregarAlumno}
+            actualizarAlumno={actualizarAlumno}
+          />
         </IonCol>
       </IonRow>
     </IonGrid>

@@ -1,12 +1,15 @@
+import { API_URL } from "../config/config";
 import {Alumno} from "../types/types";
 
   //modificar un alumno
   export const updateAlumno = async (formData: Alumno) => {
     try {
-      const response = await fetch(`/api/alumnos/${formData.id}`, {
+      const { id, ...restoDeDatos } = formData;
+
+      const response = await fetch(`${API_URL}/api/alumnos/${formData.id}`, {
         method: 'PUT',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(formData),
+        body: JSON.stringify(restoDeDatos),
       });
 
       if (!response.ok) {

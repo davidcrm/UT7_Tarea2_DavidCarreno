@@ -3,14 +3,18 @@ import {Alumno, Sexo} from '../types/types'
 import {useEffect, useState} from 'react'
 import { insertAlumno } from '../services/insertAlumno';
 import { updateAlumno } from '../services/updateAlumno';
-import { CancelOutlined, EditOutlined, Save, SaveAltOutlined } from '@mui/icons-material';
+import { EditOutlined, SaveAltOutlined } from '@mui/icons-material';
 import { EraseIcon } from './Icons/Icons';
 
 interface FormComponentProps{
-  alumnoSeleccionado: Alumno | undefined
+  alumnoSeleccionado: Alumno | undefined;
+  ultimaMatricula?: number;
+  clearAlumno: () => void;
+  agregarAlumno: (alumno: Alumno) => void;
+  actualizarAlumno: (alumno: Alumno) => void;
 }
 
-function FormComponent({alumnoSeleccionado}:FormComponentProps) {
+function FormComponent({alumnoSeleccionado, ultimaMatricula = 0, clearAlumno, agregarAlumno, actualizarAlumno}:FormComponentProps) {
   const [formData,setFormData] = useState<Alumno>({
     id: 0,
     nombre: "",
@@ -41,6 +45,8 @@ function FormComponent({alumnoSeleccionado}:FormComponentProps) {
       repetidor: false,
       activo: false,
     });
+
+    clearAlumno();
   };
 
   const handleChange = (e: any) => {
@@ -61,6 +67,23 @@ function FormComponent({alumnoSeleccionado}:FormComponentProps) {
     }));
   };
 
+  const enviarAlumno = async () => {
+    try {
+      const data = await insertAlumno(formData);
+      agregarAlumno(data);
+    } catch (error) {
+      console.error('Error al enviar el formulario:', error);
+    }
+  };
+
+  const handleActualizarAlumno = async() => {
+    try {
+      const data = await updateAlumno(formData);
+      actualizarAlumno(data);
+    } catch (error) {
+      console.error('Error al enviar el formulario de actualización:', error);
+    }
+  };
 
   return (
     <div>
@@ -81,8 +104,8 @@ function FormComponent({alumnoSeleccionado}:FormComponentProps) {
         <IonItem>
           <IonInput
             label="Matricula"
-            value={formData.matricula}
-            disabled />
+            value={formData.matricula === 0 ? ultimaMatricula + 1 : formData.matricula}
+            disabled={!!alumnoSeleccionado} />
         </IonItem>
         <IonItem>
           <IonSelect
@@ -130,17 +153,17 @@ function FormComponent({alumnoSeleccionado}:FormComponentProps) {
         </IonItem>
       </IonList>
       <div style={{display:'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '10px'}}>
-            {alumnoSeleccionado === formData ? (
+            {alumnoSeleccionado ? (
                 <IonButton 
                   fill='outline'
                   disabled={JSON.stringify(formData) === JSON.stringify(alumnoSeleccionado)} 
-                  onClick={() => updateAlumno(formData)}>
+                  onClick={handleActualizarAlumno}>
                     <EditOutlined/>
                 </IonButton>
               ) : (
                 <IonButton 
                 fill='outline'
-                onClick={() => insertAlumno(formData)}>
+                onClick={enviarAlumno}>
                   <SaveAltOutlined/>
                 </IonButton>
               )}

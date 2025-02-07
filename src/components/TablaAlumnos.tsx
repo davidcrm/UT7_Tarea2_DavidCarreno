@@ -2,13 +2,15 @@
 import { IonButton } from '@ionic/react'
 import { Alumno } from '../types/types'
 import { Delete, DeleteOutlineRounded } from '@mui/icons-material'
+import { deleteAlumno } from '../services/deleteAlumno'
 
 interface TablaAlumnosProps{
-    alumnos: Alumno[] | undefined,
-    onClick: (a: Alumno) => void
+  alumnos: Alumno[] | undefined;
+  onClick: (a: Alumno) => void;
+  eliminarAlumno: (id: number) => void;
 }
 
-function TablaAlumnos({alumnos, onClick}:TablaAlumnosProps) {
+function TablaAlumnos({alumnos, onClick, eliminarAlumno}:TablaAlumnosProps) {
 
   return (
 
@@ -35,7 +37,17 @@ function TablaAlumnos({alumnos, onClick}:TablaAlumnosProps) {
               <td onClick={ () => onClick(alumno)}>{alumno.email}</td>
               <td onClick={ () => onClick(alumno)}>{alumno.repetidor ? "Sí" : "No"}</td>
               <td onClick={ () => onClick(alumno)}>{alumno.activo ? "Sí" : "No"}</td>
-              <td><IonButton  color='danger'><DeleteOutlineRounded color='action'/></IonButton></td>
+              <td>
+                <IonButton  
+                  color='danger' 
+                  onClick={async() => {
+                    deleteAlumno(alumno.id);
+                    eliminarAlumno(alumno.id);
+                  }}
+                >
+                  <DeleteOutlineRounded color='action'/>
+                </IonButton>
+                </td>
             </tr>
           ))}
         </tbody>

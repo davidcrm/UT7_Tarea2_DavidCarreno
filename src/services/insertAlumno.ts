@@ -1,12 +1,15 @@
+import { API_URL } from "../config/config";
 import {Alumno} from "../types/types";
 
   //insertar un nuevo alumno
   export const insertAlumno = async (formData: Alumno) => {
     try {
-      const response = await fetch('/api/alumnos', {
+      const { id, ...restoDeDatos } = formData;
+
+      const response = await fetch(`${API_URL}/alumnos`, {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(formData),
+        body: JSON.stringify(restoDeDatos),
       });
 
       if (!response.ok) {
