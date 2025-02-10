@@ -3,22 +3,23 @@ import {Alumno, Sexo} from '../types/types'
 import {useEffect, useState} from 'react'
 import { insertAlumno } from '../services/insertAlumno';
 import { updateAlumno } from '../services/updateAlumno';
-import { EditOutlined, SaveAltOutlined } from '@mui/icons-material';
+import { EditOutlined, SaveAltOutlined, ShareOutlined } from '@mui/icons-material';
 import { EraseIcon } from './Icons/Icons';
 
 interface FormComponentProps{
   alumnoSeleccionado: Alumno | undefined;
-  ultimaMatricula?: number;
+  matricula: number;
   clearAlumno: () => void;
   agregarAlumno: (alumno: Alumno) => void;
   actualizarAlumno: (alumno: Alumno) => void;
+  exportarPdf: () => void;
 }
 
-function FormComponent({alumnoSeleccionado, ultimaMatricula = 0, clearAlumno, agregarAlumno, actualizarAlumno}:FormComponentProps) {
+function FormComponent({alumnoSeleccionado, matricula, clearAlumno, agregarAlumno, actualizarAlumno, exportarPdf}:FormComponentProps) {
   const [formData,setFormData] = useState<Alumno>({
     id: 0,
     nombre: "",
-    matricula: 0o000,
+    matricula,
     sexo: Sexo.M,
     email: null,
     repetidor: false,
@@ -28,6 +29,7 @@ function FormComponent({alumnoSeleccionado, ultimaMatricula = 0, clearAlumno, ag
   // Actualiza el formulario cada vez que cambia el alumno seleccionado
   useEffect(() => {
     if (alumnoSeleccionado) {
+      console.log('alumnoSeleccionado', alumnoSeleccionado);
       setFormData(alumnoSeleccionado);
     } else {
       limpiarFormulario();
@@ -39,7 +41,7 @@ function FormComponent({alumnoSeleccionado, ultimaMatricula = 0, clearAlumno, ag
     setFormData({
       id: 0,
       nombre: '',
-      matricula: 0,
+      matricula: matricula,
       sexo: Sexo.M,
       email: '',
       repetidor: false,
@@ -67,24 +69,6 @@ function FormComponent({alumnoSeleccionado, ultimaMatricula = 0, clearAlumno, ag
     }));
   };
 
-  const enviarAlumno = async () => {
-    try {
-      const data = await insertAlumno(formData);
-      agregarAlumno(data);
-    } catch (error) {
-      console.error('Error al enviar el formulario:', error);
-    }
-  };
-
-  const handleActualizarAlumno = async() => {
-    try {
-      const data = await updateAlumno(formData);
-      actualizarAlumno(data);
-    } catch (error) {
-      console.error('Error al enviar el formulario de actualización:', error);
-    }
-  };
-
   return (
     <div>
       <h1 style={{display:'flex', justifyContent: 'center', alignItems: 'center', marginTop: '10px'}}>
@@ -104,7 +88,7 @@ function FormComponent({alumnoSeleccionado, ultimaMatricula = 0, clearAlumno, ag
         <IonItem>
           <IonInput
             label="Matricula"
-            value={formData.matricula === 0 ? ultimaMatricula + 1 : formData.matricula}
+            value={formData.matricula === 0 ? matricula : formData.matricula}
             disabled={!!alumnoSeleccionado} />
         </IonItem>
         <IonItem>
@@ -157,21 +141,27 @@ function FormComponent({alumnoSeleccionado, ultimaMatricula = 0, clearAlumno, ag
                 <IonButton 
                   fill='outline'
                   disabled={JSON.stringify(formData) === JSON.stringify(alumnoSeleccionado)} 
-                  onClick={handleActualizarAlumno}>
-                    <EditOutlined/>
+                  onClick={() => actualizarAlumno(formData)}
+                >
+                  <EditOutlined/>
                 </IonButton>
               ) : (
                 <IonButton 
-                fill='outline'
-                onClick={enviarAlumno}>
+                  fill='outline'
+                  onClick={() => agregarAlumno(formData)}
+                >
                   <SaveAltOutlined/>
                 </IonButton>
               )}
-                <IonButton 
+              <IonButton fill="outline" onClick={exportarPdf}>
+                <ShareOutlined />
+              </IonButton>
+              <IonButton 
                 fill='outline'
-                  onClick={limpiarFormulario}>
-                    <EraseIcon/>
-                </IonButton>
+                onClick={limpiarFormulario}
+              >
+                <EraseIcon/>
+              </IonButton>
       </div>
     </div>
   )
