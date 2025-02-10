@@ -3,15 +3,19 @@ import { useEffect, useState } from "react";
 import { Alumno } from "../types/types";
 import TablaAlumnos from "../components/TablaAlumnos";
 import FormComponent from "../components/FormComponent";
-import {IonCol, IonGrid, IonRow } from "@ionic/react";
+import {IonCol, IonGrid, IonInput, IonRow } from "@ionic/react";
 import {getAlumnos} from "../services/getAlumnos";
 import { updateAlumno } from '../services/updateAlumno';
 import { insertAlumno } from "../services/insertAlumno";
+import autoTable from "jspdf-autotable";
+import jsPDF from "jspdf";
+import imageToBase64 from "image-to-base64";
 
 const Home: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [alumnos, setAlumnos] = useState<Alumno[]>();
   const [alumno,setAlumno] = useState<Alumno>();
+  const [prueba, setPruebas] = useState('');
 
   const alumnoConUltimaMatricula = alumnos?.reduce((acc, item) => 
     acc && acc.matricula 
@@ -72,7 +76,44 @@ const Home: React.FC = () => {
     }) ?? []); // Si el array de alumnos el undefined le damos un valor por defecto []
   };
 
-  const exportarPdf = () => {
+  const exportarPdf = async () => {
+    if (!alumnos || alumnos.length === 0) {
+      console.warn("No hay datos para exportar");
+      return;
+    }
+  
+    const doc = new jsPDF();
+
+    //const urlImagen = "http://localhost:3000/uploads/cabecera_ILH.png"
+  
+    //const logoBase64 = await imageToBase64(urlImagen)
+    // Agregar la imagen (posición x=10, y=10, ancho=50, alto=20)
+    //doc.addImage(logoBase64, "PNG", 10, 10, 50, 20);
+    // Título del documento
+    doc.setFontSize(16);
+    doc.text("Lista de Alumnos", 14, 15);
+  
+    // Definir las columnas y filas de la tabla
+    const columns = ["ID", "Nombre", "Matrícula", "Sexo", "Email", "Repetidor", "Activo"];
+    const rows = alumnos.map((alumno) => [
+      alumno.id,
+      alumno.nombre,
+      alumno.matricula,
+      alumno.sexo,
+      alumno.email,
+      alumno.repetidor ? "Sí" : "No",
+      alumno.activo ? "Sí" : "No",
+    ]);
+  
+    // Generar la tabla
+    autoTable(doc, {
+      startY: 20,
+      head: [columns],
+      body: rows,
+    });
+  
+    // Guardar el PDF
+    doc.save("alumnos.pdf");
   };
 
   return (
