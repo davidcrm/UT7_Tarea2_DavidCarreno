@@ -3,19 +3,21 @@ import { useEffect, useState } from "react";
 import { Alumno } from "../types/types";
 import TablaAlumnos from "../components/TablaAlumnos";
 import FormComponent from "../components/FormComponent";
-import {IonCol, IonGrid, IonInput, IonRow } from "@ionic/react";
+import {IonCol, IonGrid, IonRow, IonSearchbar } from "@ionic/react";
 import {getAlumnos} from "../services/getAlumnos";
 import { updateAlumno } from '../services/updateAlumno';
 import { insertAlumno } from "../services/insertAlumno";
-import autoTable from "jspdf-autotable";
-import jsPDF from "jspdf";
-import imageToBase64 from "image-to-base64";
+import {CircularProgress} from "@mui/material";
+import GraficosAlumnos from "../components/graphics";
+import exportarPdf from "../utils/exportarPdf";
+
+
 
 const Home: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [alumnos, setAlumnos] = useState<Alumno[]>();
   const [alumno,setAlumno] = useState<Alumno>();
-  const [prueba, setPruebas] = useState('');
+  const [searchText, setSearchText] = useState('');
 
   const alumnoConUltimaMatricula = alumnos?.reduce((acc, item) => 
     acc && acc.matricula 
@@ -54,7 +56,7 @@ const Home: React.FC = () => {
   // Devuelve todos los alumnos que no tienen el id que se ha pasado por parmetro (el eliminado)
   const eliminarAlumno = (id: number) => {
     const alumnosFiltrados = alumnos?.filter(item => item.id !== id);
-    setAlumnos(alumnosFiltrados ?? []);
+    setAlumnos(alumnosFiltrados ?? alumnos);
   };
 
   const actualizarAlumno = async(formData: Alumno) => {
@@ -76,45 +78,11 @@ const Home: React.FC = () => {
     }) ?? []); // Si el array de alumnos el undefined le damos un valor por defecto []
   };
 
-  const exportarPdf = async () => {
-    if (!alumnos || alumnos.length === 0) {
-      console.warn("No hay datos para exportar");
-      return;
-    }
-  
-    const doc = new jsPDF();
 
-    //const urlImagen = "http://localhost:3000/uploads/cabecera_ILH.png"
-  
-    //const logoBase64 = await imageToBase64(urlImagen)
-    // Agregar la imagen (posición x=10, y=10, ancho=50, alto=20)
-    //doc.addImage(logoBase64, "PNG", 10, 10, 50, 20);
-    // Título del documento
-    doc.setFontSize(16);
-    doc.text("Lista de Alumnos", 14, 15);
-  
-    // Definir las columnas y filas de la tabla
-    const columns = ["ID", "Nombre", "Matrícula", "Sexo", "Email", "Repetidor", "Activo"];
-    const rows = alumnos.map((alumno) => [
-      alumno.id,
-      alumno.nombre,
-      alumno.matricula,
-      alumno.sexo,
-      alumno.email,
-      alumno.repetidor ? "Sí" : "No",
-      alumno.activo ? "Sí" : "No",
-    ]);
-  
-    // Generar la tabla
-    autoTable(doc, {
-      startY: 20,
-      head: [columns],
-      body: rows,
-    });
-  
-    // Guardar el PDF
-    doc.save("alumnos.pdf");
-  };
+  // Filtrar alumnos según el texto de búsqueda
+  const alumnosFiltrados = alumnos?.filter((alumno) =>
+    alumno.nombre.toLowerCase().includes(searchText.toLowerCase())
+  );
 
   return (
     <IonGrid>
@@ -122,29 +90,40 @@ const Home: React.FC = () => {
         {
           isLoading ? (
             <IonCol size="12" class="d-flex align-items-center justify-content-center" style={{ minHeight: '80vh' }}>
-                <div className="spinner-border" role="status">
-                  <span className="sr-only">Cargando...</span>
-                </div>
+                <CircularProgress/>
             </IonCol>
           ) : (
             <>
+                <IonCol size="12">
+                  <IonSearchbar
+                    placeholder="Buscar alumno..."
+                    animated={true}
+                    value={searchText}
+                    debounce={300} // Retrasa la búsqueda para optimizar rendimiento
+                    onIonInput={(e) => setSearchText(e.detail.value!)}
+                  />
+                </IonCol>
               <IonCol size="6">
                 <TablaAlumnos 
-                  alumnos={alumnos} 
+                  alumnos={searchText ? alumnosFiltrados : alumnosFiltrados}
                   onClick={onAlumnoClick} 
                   eliminarAlumno={eliminarAlumno}
                 />
               </IonCol>
-              <IonCol size="6">
-                <FormComponent 
-                  alumnoSeleccionado={alumno} 
-                  matricula={(alumnoConUltimaMatricula?.matricula ?? 0) + 1} // Valor para generar una matricula nueva con el ultimo numero de matricula
-                  clearAlumno={() => setAlumno(undefined)}
-                  agregarAlumno={agregarAlumno}
-                  actualizarAlumno={actualizarAlumno}
-                  exportarPdf={exportarPdf}
-                />
+              <IonCol size="6" >
+                  <FormComponent
+                    alumnoSeleccionado={alumno}
+                    matricula={(alumnoConUltimaMatricula?.matricula ?? 0) + 1} // Valor para generar una matricula nueva con el ultimo numero de matricula
+                    clearAlumno={() => setAlumno(undefined)}
+                    agregarAlumno={agregarAlumno}
+                    actualizarAlumno={actualizarAlumno}
+                    exportarPdf={() => exportarPdf(alumnos!)}
+                  />
+                <IonRow>
+                  <GraficosAlumnos alumnos={searchText ? alumnosFiltrados! :alumnos!}/>
+                </IonRow>
               </IonCol>
+
             </>
           )
         }

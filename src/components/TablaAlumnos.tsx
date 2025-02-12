@@ -1,7 +1,7 @@
 
 import { IonButton } from '@ionic/react'
 import { Alumno } from '../types/types'
-import { Delete, DeleteOutlineRounded } from '@mui/icons-material'
+import { DeleteOutlineRounded } from '@mui/icons-material'
 import { deleteAlumno } from '../services/deleteAlumno'
 
 interface TablaAlumnosProps{
@@ -14,7 +14,7 @@ function TablaAlumnos({alumnos, onClick, eliminarAlumno}:TablaAlumnosProps) {
 
   return (
 
-  <div className="d-flex flex-column" style={{ height: "100vh" }}>
+  <div className="d-flex flex-column" style={{ height: "90vh" }}>
     <div className="flex-grow-1 overflow-auto">
       <table className="table table-dark table-striped table-bordered">
         <thead className="thead-dark">
@@ -31,13 +31,13 @@ function TablaAlumnos({alumnos, onClick, eliminarAlumno}:TablaAlumnosProps) {
         <tbody>
           {alumnos?.map((alumno, id) => (
             <tr key={id}>
-              <td onClick={ () => onClick(alumno)}>{alumno.nombre}</td>
-              <td onClick={ () => onClick(alumno)}>{alumno.matricula}</td>
-              <td onClick={ () => onClick(alumno)}>{alumno.sexo}</td>
-              <td onClick={ () => onClick(alumno)}>{alumno.email}</td>
-              <td onClick={ () => onClick(alumno)}>{alumno.repetidor ? "Sí" : "No"}</td>
-              <td onClick={ () => onClick(alumno)}>{alumno.activo ? "Sí" : "No"}</td>
-              <td>
+              <td onClick={ () => onClick(alumno)} style={{textAlign: 'center'}}>{alumno.nombre}</td>
+              <td onClick={ () => onClick(alumno)} style={{textAlign: 'center'}}>{alumno.matricula}</td>
+              <td onClick={ () => onClick(alumno)} style={{textAlign: 'center'}}>{alumno.sexo}</td>
+              <td onClick={ () => onClick(alumno)} style={{textAlign: 'center'}}>{alumno.email}</td>
+              <td onClick={ () => onClick(alumno)} style={{textAlign: 'center'}}>{alumno.repetidor ? "Sí" : "No"}</td>
+              <td onClick={ () => onClick(alumno)} style={{textAlign: 'center'}}>{alumno.activo ? "Sí" : "No"}</td>
+              <td style={{textAlign: 'center', alignItems: 'center'}}>
                 <IonButton  
                   color='danger' 
                   onClick={async() => {

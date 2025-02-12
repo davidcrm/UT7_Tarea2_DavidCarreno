@@ -71,9 +71,11 @@ function FormComponent({alumnoSeleccionado, matricula, clearAlumno, agregarAlumn
 
   return (
     <div>
-      <h1 style={{display:'flex', justifyContent: 'center', alignItems: 'center', marginTop: '10px'}}>
+      {/*
+       <h1 style={{display:'flex', justifyContent: 'center', alignItems: 'center', marginTop: '10px'}}>
         {alumnoSeleccionado === formData ? `Modificar registro.` : "Crear un nuevo registro."}
       </h1>
+      */}
       <IonList>
         <IonItem>
           <IonInput
@@ -89,7 +91,7 @@ function FormComponent({alumnoSeleccionado, matricula, clearAlumno, agregarAlumn
           <IonInput
             label="Matricula"
             value={formData.matricula === 0 ? matricula : formData.matricula}
-            disabled={!!alumnoSeleccionado} />
+            disabled/>
         </IonItem>
         <IonItem>
           <IonSelect
@@ -136,7 +138,7 @@ function FormComponent({alumnoSeleccionado, matricula, clearAlumno, agregarAlumn
           </IonSelect>
         </IonItem>
       </IonList>
-      <div style={{display:'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '10px'}}>
+      <div style={{display:'flex', justifyContent: 'center', alignItems: 'center', marginTop: '10px'}}>
             {alumnoSeleccionado ? (
                 <IonButton 
                   fill='outline'
@@ -148,13 +150,18 @@ function FormComponent({alumnoSeleccionado, matricula, clearAlumno, agregarAlumn
               ) : (
                 <IonButton 
                   fill='outline'
-                  onClick={() => agregarAlumno(formData)}
+                  onClick={() => {
+                    agregarAlumno(formData);
+                    limpiarFormulario()}
+                  }
                 >
                   <SaveAltOutlined/>
                 </IonButton>
               )}
-              <IonButton fill="outline" onClick={exportarPdf}>
-                <ShareOutlined />
+              <IonButton
+                fill="outline"
+                onClick={exportarPdf}>
+                  <ShareOutlined />
               </IonButton>
               <IonButton 
                 fill='outline'
