@@ -1,8 +1,9 @@
+import { API_URL } from "../config/config";
 import {Alumno} from "../types/types";
 
 export const getAlumnos = async () => {
   try {
-    const response = await fetch("http://localhost:3000/api/alumnos");
+    const response = await fetch(`${API_URL}/alumnos`);
 
     if (!response.ok) {
       console.log("Error al obtener los alumnos");

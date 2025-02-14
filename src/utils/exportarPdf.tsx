@@ -23,7 +23,7 @@ async function exportarPdf(alumnos: Alumno[]) {
   doc.addImage(logoBase64,'PNG',10,10,180,20);
   // Título del documento
   doc.setFontSize(16);
-  doc.text("Lista de Alumnos", 14, 40);
+  doc.text("Alumnos: ", 14, 40);
 
   // Definir las columnas y filas de la tabla
   const columns = ["Nombre", "Matrícula", "Sexo", "Email", "Repetidor", "Activo"];

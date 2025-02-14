@@ -71,11 +71,9 @@ function FormComponent({alumnoSeleccionado, matricula, clearAlumno, agregarAlumn
 
   return (
     <div>
-      {/*
        <h1 style={{display:'flex', justifyContent: 'center', alignItems: 'center', marginTop: '10px'}}>
         {alumnoSeleccionado === formData ? `Modificar registro.` : "Crear un nuevo registro."}
       </h1>
-      */}
       <IonList>
         <IonItem>
           <IonInput
